@@ -1,0 +1,18 @@
+---
+- name: Deploy DevOps Java Application
+  hosts: localhost
+  connection: local
+  become: false
+
+  tasks:
+    - name: Remove old Docker container
+      community.docker.docker_container:
+        name: devops-cicd-container
+        state: absent
+
+    - name: Run Docker container
+      community.docker.docker_container:
+        name: devops-cicd-container
+        image: devops-cicd-app:1
+        state: started
+        detach: false
