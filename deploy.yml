@@ -13,6 +13,6 @@
     - name: Run Docker container
       community.docker.docker_container:
         name: devops-cicd-container
-        image: devops-cicd-app:1
+        image: "devops-cicd-app:{{ build_number }}"
         state: started
         detach: false

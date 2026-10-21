@@ -5,7 +5,7 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Source code is available in the workspace'
+                echo 'Source code checkout completed'
             }
         }
 
@@ -21,14 +21,17 @@ pipeline {
             }
         }
 
-        stage('Docker Run') {
+        stage('Docker Test') {
             steps {
-                sh '''
-                    docker rm -f devops-cicd-container || true
-                    docker run --name devops-cicd-container devops-cicd-app:${BUILD_NUMBER}
-                '''
+                sh 'docker run --rm devops-cicd-app:${BUILD_NUMBER}'
             }
         }
+
+        stage('Ansible Deploy') {
+	    steps {
+       		 sh 'ansible-playbook deploy.yml --extra-vars "build_number=${BUILD_NUMBER}"'
+      	   }
+       }
     }
 
     post {
